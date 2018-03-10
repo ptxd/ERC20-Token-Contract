@@ -109,8 +109,8 @@ contract FixedSupplyToken is ERC20Interface, Owned {
     // Constructor
     // ------------------------------------------------------------------------
     function FixedSupplyToken() public {
-        symbol = "OPT";
-        name = "Optin Coin";
+        symbol = "HELP";
+        name = "Helpme";
         decimals = 18;
         _totalSupply = 430000000 * 10**uint(decimals);
         balances[owner] = _totalSupply;
