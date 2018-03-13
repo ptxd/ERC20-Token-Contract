@@ -21,7 +21,7 @@ library SafeMath {
 }
 
 
-contract TopPlayToken {
+contract KeffylToken {
     function totalSupply() public constant returns (uint);
     function balanceOf(address tokenOwner) public constant returns (uint balance);
     function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
@@ -68,7 +68,7 @@ contract Owned {
 }
 
 
-contract FixedSupplyToken is TopPlayToken, Owned {
+contract FixedSupplyToken is KeffylToken, Owned {
     using SafeMath for uint;
 
     string public symbol;
@@ -81,10 +81,10 @@ contract FixedSupplyToken is TopPlayToken, Owned {
 
 
     function FixedSupplyToken() public {
-        symbol = "TPLY";
-        name = "TopPlay Token";
+        symbol = "KFY";
+        name = "Keffyl";
         decimals = 18;
-        _totalSupply = 10000000000 * 10**uint(decimals);
+        _totalSupply = 400000000 * 10**uint(decimals);
         balances[owner] = _totalSupply;
         Transfer(address(0), owner, _totalSupply);
     }
@@ -147,6 +147,6 @@ contract FixedSupplyToken is TopPlayToken, Owned {
 
 
     function transferAnyERC20Token(address tokenAddress, uint tokens) public onlyOwner returns (bool success) {
-        return TopPlayToken(tokenAddress).transfer(owner, tokens);
+        return KeffylToken(tokenAddress).transfer(owner, tokens);
     }
 }
