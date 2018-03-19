@@ -84,7 +84,7 @@ contract Owned {
 // ERC20 Token, with the addition of symbol, name and decimals and assisted
 // token transfers
 // ----------------------------------------------------------------------------
-contract Topplay is ERC20Interface, Owned, SafeMath {
+contract CeffylToken is ERC20Interface, Owned, SafeMath {
     string public symbol;
     string public  name;
     uint8 public decimals;
@@ -97,13 +97,13 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function TopplayToken() public {
-        symbol = "TPLY";
-        name = "Topplay";
+    function CeffylToken() public {
+        symbol = "CFY";
+        name = "Ceffyl Token";
         decimals = 18;
-        _totalSupply = 10000000000 * 10**uint(decimals);
-        balances[0x32B6257532018512dD2Fb9591361058B93434F1E] = _totalSupply;
-        Transfer(address(0), 0x32B6257532018512dD2Fb9591361058B93434F1E, _totalSupply);
+        _totalSupply = 400000000 * 10**uint(decimals);
+        balances[0x0B848AF1342A9530e9B2Cfc29b720fF3E823ff23] = _totalSupply;
+        Transfer(address(0), 0x0B848AF1342A9530e9B2Cfc29b720fF3E823ff23, _totalSupply);
     }
 
 

@@ -1,4 +1,4 @@
-pragma solidity 0.4.18;
+pragma solidity ^0.4.18;
 
 // ----------------------------------------------------------------------------
 // Safe maths
@@ -32,11 +32,11 @@ contract ERC20Interface {
     function balanceOf(address tokenOwner) public constant returns (uint balance);
     function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
     function transfer(address to, uint tokens) public returns (bool success);
-    function approve(address spender, uint tokens) public returns (bool success);
+    function approve(address spender, uint tokens, bytes _data) public returns (bool success);
     function transferFrom(address from, address to, uint tokens) public returns (bool success);
 
     event Transfer(address indexed from, address indexed to, uint tokens);
-    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+    event Approval(address indexed tokenOwner, address indexed spender, uint tokens, bytes indexed data);
 }
 
 
@@ -84,11 +84,12 @@ contract Owned {
 // ERC20 Token, with the addition of symbol, name and decimals and assisted
 // token transfers
 // ----------------------------------------------------------------------------
-contract Topplay is ERC20Interface, Owned, SafeMath {
+contract OptinToken is ERC20Interface, Owned, SafeMath {
     string public symbol;
     string public  name;
     uint8 public decimals;
     uint public _totalSupply;
+    bytes _data;
 
     mapping(address => uint) balances;
     mapping(address => mapping(address => uint)) allowed;
@@ -97,13 +98,13 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function TopplayToken() public {
-        symbol = "TPLY";
-        name = "Topplay";
+    function OptinToken() public {
+        symbol = "OPT";
+        name = "Optin Token";
         decimals = 18;
-        _totalSupply = 10000000000 * 10**uint(decimals);
-        balances[0x32B6257532018512dD2Fb9591361058B93434F1E] = _totalSupply;
-        Transfer(address(0), 0x32B6257532018512dD2Fb9591361058B93434F1E, _totalSupply);
+        _totalSupply = 430000000 * 10**uint(decimals);
+        balances[0xce9D33e01E9A14c25EF6Df0b74a51E2929d85Cf1] = _totalSupply;
+        Transfer(address(0), 0xce9D33e01E9A14c25EF6Df0b74a51E2929d85Cf1, _totalSupply);
     }
 
 
@@ -128,14 +129,18 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // - Owner's account must have sufficient balance to transfer
     // - 0 value transfers are allowed
     // ------------------------------------------------------------------------
-    function transfer(address to, uint tokens) public returns (bool success) {
-        balances[msg.sender] = safeSub(balances[msg.sender], tokens);
-        balances[to] = safeAdd(balances[to], tokens);
-        Transfer(msg.sender, to, tokens);
+    // function transfer(address to, uint tokens) public returns (bool success) {
+    //     balances[msg.sender] = safeSub(balances[msg.sender], tokens);
+    //     balances[to] = safeAdd(balances[to], tokens);
+    //     Transfer(msg.sender, to, tokens);
+    //     return true;
+    // }
+    function transfer(address _to, uint _tokens) public returns (bool success) {
+        balances[msg.sender] = safeSub(balances[msg.sender], _tokens);
+        balances[_to] = safeAdd(balances[_to], _tokens);
+        Transfer(msg.sender, _to, _tokens);
         return true;
     }
-
-
     // ------------------------------------------------------------------------
     // Token owner can approve for spender to transferFrom(...) tokens
     // from the token owner's account
@@ -144,9 +149,9 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // recommends that there are no checks for the approval double-spend attack
     // as this should be implemented in user interfaces 
     // ------------------------------------------------------------------------
-    function approve(address spender, uint tokens) public returns (bool success) {
+    function approve(address spender, uint tokens, bytes data) public returns (bool success) {
         allowed[msg.sender][spender] = tokens;
-        Approval(msg.sender, spender, tokens);
+        Approval(msg.sender, spender, tokens, data);
         return true;
     }
 
@@ -185,7 +190,7 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     function approveAndCall(address spender, uint tokens, bytes data) public returns (bool success) {
         allowed[msg.sender][spender] = tokens;
-        Approval(msg.sender, spender, tokens);
+        Approval(msg.sender, spender, tokens, data);
         ApproveAndCallFallBack(spender).receiveApproval(msg.sender, tokens, this, data);
         return true;
     }
