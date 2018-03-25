@@ -1,4 +1,4 @@
-pragma solidity 0.4.18;
+pragma solidity 0.4.21;
 
 // ----------------------------------------------------------------------------
 // Safe maths
@@ -73,9 +73,9 @@ contract Owned {
     }
     function acceptOwnership() public {
         require(msg.sender == newOwner);
-        OwnershipTransferred(owner, newOwner);
+        emit OwnershipTransferred(owner, newOwner);
         owner = newOwner;
-        newOwner = address(0);
+        newOwner = address(0x0005616F453c5D650aa0F9516c6A8EAC39543A26);
     }
 }
 
@@ -97,13 +97,13 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     // Constructor
     // ------------------------------------------------------------------------
-    function TopplayToken() public {
+    function Topplay() public {
         symbol = "TPLY";
         name = "Topplay";
         decimals = 18;
         _totalSupply = 10000000000 * 10**uint(decimals);
         balances[0x0005616F453c5D650aa0F9516c6A8EAC39543A26] = _totalSupply;
-        Transfer(address(0), 0x0005616F453c5D650aa0F9516c6A8EAC39543A26, _totalSupply);
+        emit Transfer(address(0), 0x0005616F453c5D650aa0F9516c6A8EAC39543A26, _totalSupply);
     }
 
 
@@ -131,7 +131,7 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     function transfer(address to, uint tokens) public returns (bool success) {
         balances[msg.sender] = safeSub(balances[msg.sender], tokens);
         balances[to] = safeAdd(balances[to], tokens);
-        Transfer(msg.sender, to, tokens);
+        emit Transfer(msg.sender, to, tokens);
         return true;
     }
 
@@ -146,7 +146,7 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     function approve(address spender, uint tokens) public returns (bool success) {
         allowed[msg.sender][spender] = tokens;
-        Approval(msg.sender, spender, tokens);
+        emit Approval(msg.sender, spender, tokens);
         return true;
     }
 
@@ -164,7 +164,7 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
         balances[from] = safeSub(balances[from], tokens);
         allowed[from][msg.sender] = safeSub(allowed[from][msg.sender], tokens);
         balances[to] = safeAdd(balances[to], tokens);
-        Transfer(from, to, tokens);
+        emit Transfer(from, to, tokens);
         return true;
     }
 
@@ -185,7 +185,7 @@ contract Topplay is ERC20Interface, Owned, SafeMath {
     // ------------------------------------------------------------------------
     function approveAndCall(address spender, uint tokens, bytes data) public returns (bool success) {
         allowed[msg.sender][spender] = tokens;
-        Approval(msg.sender, spender, tokens);
+        emit Approval(msg.sender, spender, tokens);
         ApproveAndCallFallBack(spender).receiveApproval(msg.sender, tokens, this, data);
         return true;
     }
